@@ -31,7 +31,7 @@ module.exports = {
 
     approveAppointment: (req, res) => {
         let {apptId} = req.body
-        
+
         sequelize.query(`
         
         UPDATE cc_appointments 
@@ -80,6 +80,21 @@ module.exports = {
         WHERE a.approved = true AND a.completed = true
         ORDER BY a.date DESC
         ;`)
+
+        .then(dbRes => res.status(200).send(dbRes[0]))
+        .catch(err => console.log(err))
+    },
+
+    completeAppointment: (req,res) => {
+
+        let {apptId} = req.body
+
+        sequelize.query(`
+        UPDATE cc_appointments
+        SET completed = true
+        WHERE appt_id = ${apptId}
+        ;`)
+
 
         .then(dbRes => res.status(200).send(dbRes[0]))
         .catch(err => console.log(err))
